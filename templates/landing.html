@@ -1,0 +1,132 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PCNHS Attendance Monitoring System</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'primary': '#45562D',
+            'secondary': '#6a7f47',
+            'light': '#f4f6f3',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    html { scroll-behavior: smooth; }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+  <!-- Navbar -->
+  <header class="bg-primary text-white shadow-md">
+    <div class="max-w-7xl mx-auto flex justify-between items-center p-4">
+      <div class="flex items-center space-x-3">
+        <img src="{% static 'image/PCNHSlogo.png' %}" alt="Logo" class="h-14 w-14 object-contain">
+        <span class="font-bold text-xl tracking-wide">STUDENT ATTENDANCE AND MONITORING SYSTEM</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="bg-gradient-to-r from-primary to-secondary text-white py-16 md:py-20">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center px-6 md:px-12">
+      <!-- Left content -->
+      <div class="flex-1 text-center md:text-left">
+        <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight">
+          Student Attendance and Monitoring System
+        </h1>
+        <p class="mt-4 text-base sm:text-lg text-gray-200">
+          With <span class="font-bold">SMS Notifications</span> and 
+          <span class="font-bold">RFID Technology</span> – ensuring accurate and reliable attendance monitoring for students at PCNHS.
+        </p>
+        <div class="mt-6 flex flex-col sm:flex-row justify-center md:justify-start gap-4">
+          <a href="{% url 'home' %}" class="px-6 py-3 bg-white text-primary font-semibold rounded-lg shadow hover:bg-gray-200 transition">
+            Login to Get Started
+          </a>
+          <a href="#features" class="px-6 py-3 bg-gray-800 text-white font-semibold rounded-lg shadow hover:bg-gray-900 transition">
+            Learn More
+          </a>
+        </div>
+      </div>
+
+      <!-- Right content -->
+      <div class="flex-1 mt-10 md:mt-0 flex justify-center">
+        <img src="{% static 'image/PCNHSlogo.png' %}" alt="Attendance Illustration" class="w-64 sm:w-80 md:w-96 drop-shadow-xl rounded-xl">
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section id="features" class="py-16 bg-light">
+    <div class="max-w-7xl mx-auto px-6">
+      <h2 class="text-3xl font-bold text-center mb-12">Key Features & Benefits</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+        
+        <!-- Feature cards -->
+        <div class="bg-white p-6 sm:p-8 rounded-xl shadow hover:shadow-lg transition">
+          <div class="text-primary text-4xl mb-4">🔒</div>
+          <h3 class="font-bold text-xl mb-2">Data Privacy</h3>
+          <p class="text-gray-600 text-sm sm:text-base">
+            Student and teacher information is securely stored. Access is limited to authorized personnel only, ensuring confidentiality at all times.
+          </p>
+        </div>
+        
+        <div class="bg-white p-6 sm:p-8 rounded-xl shadow hover:shadow-lg transition">
+          <div class="text-primary text-4xl mb-4">📱</div>
+          <h3 class="font-bold text-xl mb-2">Parent Notifications</h3>
+          <p class="text-gray-600 text-sm sm:text-base">
+            Teachers can notify parents directly via SMS regarding attendance, tardiness, or important updates, keeping parents informed in real-time.
+          </p>
+        </div>
+        
+        <div class="bg-white p-6 sm:p-8 rounded-xl shadow hover:shadow-lg transition">
+          <div class="text-primary text-4xl mb-4">📊</div>
+          <h3 class="font-bold text-xl mb-2">Attendance Analytics</h3>
+          <p class="text-gray-600 text-sm sm:text-base">
+            Track student attendance trends, generate reports, and identify patterns to improve classroom management and decision-making.
+          </p>
+        </div>
+        
+        <div class="bg-white p-6 sm:p-8 rounded-xl shadow hover:shadow-lg transition">
+          <div class="text-primary text-4xl mb-4">👩‍🏫</div>
+          <h3 class="font-bold text-xl mb-2">Teacher Access</h3>
+          <p class="text-gray-600 text-sm sm:text-base">
+            Teachers can easily log in, monitor their classes, and manage student attendance efficiently through a simple dashboard.
+          </p>
+        </div>
+        
+        <div class="bg-white p-6 sm:p-8 rounded-xl shadow hover:shadow-lg transition">
+          <div class="text-primary text-4xl mb-4">📡</div>
+          <h3 class="font-bold text-xl mb-2">Fast & Reliable RFID</h3>
+          <p class="text-gray-600 text-sm sm:text-base">
+            Quick scanning of student IDs ensures accurate attendance records without delays, minimizing errors and manual input.
+          </p>
+        </div>
+        
+        <div class="bg-white p-6 sm:p-8 rounded-xl shadow hover:shadow-lg transition">
+          <div class="text-primary text-4xl mb-4">⏱️</div>
+          <h3 class="font-bold text-xl mb-2">Real-Time Updates</h3>
+          <p class="text-gray-600 text-sm sm:text-base">
+            Attendance records are updated immediately in the system, allowing teachers and administrators to access current data anytime.
+          </p>
+        </div>
+        
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-primary text-white text-center py-6 mt-12">
+    <p>&copy; 2025 Pines City National High School. All Rights Reserved.</p>
+  </footer>
+
+</body>
+</html>

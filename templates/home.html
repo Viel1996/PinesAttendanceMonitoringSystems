@@ -1,0 +1,184 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance Scanner</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'navbar-btn': '#a5b379',
+                        'navbar-btn-hover': '#cfd3c3'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+</head>
+<body class="bg-gray-100 h-screen flex flex-col">
+
+    <!-- Navigation bar -->
+    <header class="bg-[#45562D] text-white p-4 shadow flex flex-col md:flex-row md:justify-between md:items-center">
+        <div class="mb-2 md:mb-0 flex items-center space-x-3">
+        <!-- Logo -->
+        <img src="{% static 'image/PCNHSlogo.png' %}" alt="Logo" class="h-12 w-12 object-contain">
+
+        <!-- Title -->
+        <div>
+            <h1 class="font-bold text-xl">STUDENT ATTENDANCE AND MONITORING SYSTEM</h1>
+            <h2 class="text-sm text-gray-300">WITH SMS AND RFID TECHNOLOGY</h2>
+        </div>
+    </div>
+
+    <!-- Dropdown menu -->
+    <div class="relative">
+        <!-- Gear Icon button -->
+        <button id="menuBtn" class="bg-navbar-btn text-black p-2 rounded-full hover:bg-navbar-btn-hover focus:outline-none">
+            <!-- Gear icon -->
+            <svg id="menuIcon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317a1 1 0 01.85-.49h1.65a1 1 0 01.85.49l.84 1.473a1 1 0 00.607.44l1.716.497a1 1 0 01.57 1.31l-.63 1.732a1 1 0 000 .684l.63 1.732a1 1 0 01-.57 1.31l-1.716.497a1 1 0 00-.607.44l-.84 1.473a1 1 0 01-.85.49h-1.65a1 1 0 01-.85-.49l-.84-1.473a1 1 0 00-.607-.44l-1.716-.497a1 1 0 01-.57-1.31l.63-1.732a1 1 0 000-.684l-.63-1.732a1 1 0 01.57-1.31l1.716-.497a1 1 0 00.607-.44l.84-1.473z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+        </button>
+
+        <!-- Dropdown items -->
+        <div id="menuDropdown" class="hidden absolute right-0 mt-2 w-48 bg-white text-black rounded-lg shadow-lg overflow-hidden transform scale-95 opacity-0 transition-all duration-200 origin-top-right">
+            <a href="#" class="block px-4 py-2 hover:bg-gray-100">📋 Attendance Sheet</a>
+            <!-- Dashboard Button -->
+            <a href="{% url 'dashboard' %}" class="relative bg-navbar-btn hover:bg-navbar-btn-hover text-black px-4 py-2 rounded flex items-center space-x-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M10 2a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0V8H6a1 1 0 110-2h3V3a1 1 0 011-1z" />
+                </svg>
+                <span>Dashboard</span>
+            </a>
+            <a href="#" class="block px-4 py-2 hover:bg-gray-100">📡 Scan</a>
+            <a href="#" class="block px-4 py-2 hover:bg-gray-100">👤 Profile</a>
+            <a href="#" onclick="openRegisterModal()" class="block px-4 py-2 hover:bg-gray-100">📝 Register</a>
+
+            <a href="#" class="block px-4 py-2 hover:bg-red-100 text-red-600">🚪 Logout</a>
+        </div>
+    </div>
+</header>
+
+<script>
+    // Toggle dropdown
+    const menuBtn = document.getElementById('menuBtn');
+    const menuDropdown = document.getElementById('menuDropdown');
+    const menuIcon = document.getElementById('menuIcon');
+
+    menuBtn.addEventListener('click', () => {
+        const isOpen = !menuDropdown.classList.contains('hidden');
+        
+        if (isOpen) {
+            // Close
+            menuDropdown.classList.add('hidden', 'opacity-0', 'scale-95');
+            menuDropdown.classList.remove('opacity-100', 'scale-100');
+            menuIcon.classList.remove('rotate-180');
+        } else {
+            // Open
+            menuDropdown.classList.remove('hidden', 'opacity-0', 'scale-95');
+            menuDropdown.classList.add('opacity-100', 'scale-100');
+            menuIcon.classList.add('rotate-180');
+        }
+    });
+
+    // Close when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!menuBtn.contains(e.target) && !menuDropdown.contains(e.target)) {
+            menuDropdown.classList.add('hidden', 'opacity-0', 'scale-95');
+            menuDropdown.classList.remove('opacity-100', 'scale-100');
+            menuIcon.classList.remove('rotate-180');
+        }
+    });
+</script>
+
+
+    <!-- Main content -->
+    <main class="flex-1 p-6 overflow-auto">
+        <div class="w-full space-y-6 px-10">
+
+        <!-- Scanner section -->
+        <section class="bg-white p-6 rounded-xl shadow mb-6">
+            <h2 class="text-2xl font-bold mb-4">Scanner</h2>
+            <p class="text-gray-700 mb-4">Scan an RFID tag.</p>
+
+            <!-- POST form for RFID scanning -->
+            <form method="POST">
+                {% csrf_token %}
+                <div class="flex space-x-2 items-center">
+                    <input type="text" name="rfid_code" placeholder="Scan RFID" class="border p-2 rounded flex-1" autofocus>
+                    <button type="submit" class="bg-navbar-btn text-black px-4 py-2 rounded hover:bg-navbar-btn-hover">Scan</button>
+                </div>
+            </form>
+        </section>
+
+        <!-- Scan logs section -->
+        <section class="bg-white p-6 rounded-xl shadow">
+            <h2 class="text-2xl font-bold mb-4">Scan Logs</h2>
+            <div class="overflow-auto">
+                <table id="scanLogsTable" class="display stripe hover w-full">
+                    <thead>
+                        <tr>
+                            <th>Time</th>
+                            <th>User</th>
+                            <th>RFID Code</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for log in logs %}
+                    <tr>
+                        <td>{{ log.timestamp|date:"H:i A" }}</td>
+                        <td>
+                            {% if log.student %}
+                                {{ log.student.name }}
+                            {% else %}
+                                Unknown
+                            {% endif %}
+                        </td>
+                        <td>{{ log.rfid_code }}</td>
+                        <td>
+                            {% if log.status == 'Success' %}
+                                <span class="text-green-600 font-semibold">Success</span>
+                            {% else %}
+                                <span class="text-red-600 font-semibold">Failed</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-center text-gray-500">No scans yet.</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        </div>
+    </main>
+
+    <!-- jQuery + DataTables -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('#scanLogsTable').DataTable({
+                pageLength: 5,                 // default rows per page
+                lengthMenu: [5, 10, 20, 50],   // dropdown choices
+                scrollY: "400px",              // vertical scroll
+                scrollCollapse: true,
+                paging: true                   // enable pagination
+            });
+        });
+    </script>
+
+</body>
+</html>

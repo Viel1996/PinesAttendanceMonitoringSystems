@@ -1,0 +1,218 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - PCNHS Attendance System</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'primary': '#45562D',
+            'secondary': '#6a7f47',
+            'light': '#f4f6f3',
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col">
+
+  <!-- Navbar -->
+  <!-- Navigation bar -->
+    <header class="bg-[#45562D] text-white p-4 shadow flex flex-col md:flex-row md:justify-between md:items-center">
+        <div class="mb-2 md:mb-0 flex items-center space-x-3">
+        <!-- Logo -->
+        <img src="{% static 'image/PCNHSlogo.png' %}" alt="Logo" class="h-12 w-12 object-contain">
+
+        <!-- Title -->
+        <div>
+            <h1 class="font-bold text-xl">STUDENT ATTENDANCE AND MONITORING SYSTEM</h1>
+            <h2 class="text-sm text-gray-300">WITH SMS AND RFID TECHNOLOGY</h2>
+        </div>
+    </div>
+  </header>
+
+    <!-- Main Dashboard -->
+    <main class="flex-1 p-6 overflow-auto">
+      <div class="w-full space-y-6 px-10">
+
+      <!-- First Row: 3 Containers -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
+          <h3 class="text-xl font-bold mb-2">Total Students</h3>
+          <p class="text-3xl font-semibold text-primary">25</p>
+        </div>
+        <div class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
+          <h3 class="text-xl font-bold mb-2">Total Teachers</h3>
+          <p class="text-3xl font-semibold text-primary">5</p>
+        </div>
+        <div class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
+          <h3 class="text-xl font-bold mb-2">Classes</h3>
+          <p class="text-3xl font-semibold text-primary">10</p>
+        </div>
+      </div>
+
+      <!-- Second Row: 4 Containers -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+        <div class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
+          <h3 class="text-lg font-bold mb-1">Present Today</h3>
+          <p class="text-2xl font-semibold text-secondary">22</p>
+        </div>
+        <div class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
+          <h3 class="text-lg font-bold mb-1">Absent Today</h3>
+          <p class="text-2xl font-semibold text-red-600">3</p>
+        </div>
+        <div class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
+          <h3 class="text-lg font-bold mb-1">Late Arrivals</h3>
+          <p class="text-2xl font-semibold text-yellow-500">1</p>
+        </div>
+        <div class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
+          <h3 class="text-lg font-bold mb-1">Notifications Sent</h3>
+          <p class="text-2xl font-semibold text-green-600">5</p>
+        </div>
+      </div>
+
+      <!-- Graph Section -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Line Chart: Weekly Attendance -->
+        <div class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
+          <h2 class="text-2xl font-bold mb-4">Weekly Attendance Overview</h2>
+          <canvas id="attendanceChart" class="w-full h-64"></canvas>
+        </div>
+
+        <!-- Pie Chart: Student Attendance % -->
+        <div class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
+          <h2 class="text-2xl font-bold mb-4">Student Attendance Percentage</h2>
+          <canvas id="attendancePie" class="w-full h-64"></canvas>
+        </div>
+      </div>
+
+      <!-- Student Attendance Table with Progress Bars -->
+        <div class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition overflow-x-auto">
+        <h2 class="text-2xl font-bold mb-4">Student Attendance List</h2>
+        <table class="w-full table-auto border-collapse">
+            <thead>
+            <tr class="bg-light text-left">
+                <th class="border px-4 py-2">Student Name</th>
+                <th class="border px-4 py-2">Total Days</th>
+                <th class="border px-4 py-2">Absent Days</th>
+                <th class="border px-4 py-2">Attendance %</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- Static sample data -->
+            <tr class="hover:bg-gray-100">
+                <td class="border px-4 py-2">Juan Dela Cruz</td>
+                <td class="border px-4 py-2">220</td>
+                <td class="border px-4 py-2">3</td>
+                <td class="border px-4 py-2">
+                <div class="w-full bg-gray-200 rounded-full h-6 relative">
+                    <div class="bg-primary h-6 rounded-full text-white text-center text-sm" style="width: 98.6%;">98.6%</div>
+                </div>
+                </td>
+            </tr>
+            <tr class="hover:bg-gray-100">
+                <td class="border px-4 py-2">Maria Santos</td>
+                <td class="border px-4 py-2">220</td>
+                <td class="border px-4 py-2">0</td>
+                <td class="border px-4 py-2">
+                <div class="w-full bg-gray-200 rounded-full h-6 relative">
+                    <div class="bg-primary h-6 rounded-full text-white text-center text-sm" style="width: 100%;">100%</div>
+                </div>
+                </td>
+            </tr>
+            <tr class="hover:bg-gray-100">
+                <td class="border px-4 py-2">Pedro Reyes</td>
+                <td class="border px-4 py-2">220</td>
+                <td class="border px-4 py-2">5</td>
+                <td class="border px-4 py-2">
+                <div class="w-full bg-gray-200 rounded-full h-6 relative">
+                    <div class="bg-primary h-6 rounded-full text-white text-center text-sm" style="width: 97.7%;">97.7%</div>
+                </div>
+                </td>
+            </tr>
+            <tr class="hover:bg-gray-100">
+                <td class="border px-4 py-2">Ana Cruz</td>
+                <td class="border px-4 py-2">220</td>
+                <td class="border px-4 py-2">2</td>
+                <td class="border px-4 py-2">
+                <div class="w-full bg-gray-200 rounded-full h-6 relative">
+                    <div class="bg-primary h-6 rounded-full text-white text-center text-sm" style="width: 99.1%;">99.1%</div>
+                </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        </div>
+
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-primary text-white text-center py-6 mt-auto">
+    <p>&copy; 2025 Pines City National High School. All Rights Reserved.</p>
+  </footer>
+
+  <!-- Chart.js Script -->
+  <script>
+    // Line chart: Weekly attendance
+    const ctx = document.getElementById('attendanceChart').getContext('2d');
+    const attendanceChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
+        datasets: [{
+          label: 'Present Students',
+          data: [22, 21, 23, 22, 22],
+          backgroundColor: 'rgba(70, 86, 45, 0.2)',
+          borderColor: '#45562D',
+          borderWidth: 2,
+          fill: true,
+          tension: 0.4
+        },{
+          label: 'Absent Students',
+          data: [3, 4, 2, 3, 3],
+          backgroundColor: 'rgba(255, 99, 132, 0.2)',
+          borderColor: '#EF4444',
+          borderWidth: 2,
+          fill: true,
+          tension: 0.4
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { position: 'top' } },
+        scales: { y: { beginAtZero: true } }
+      }
+    });
+
+    // Pie chart: Student attendance %
+    const pieCtx = document.getElementById('attendancePie').getContext('2d');
+    const pieLabels = ["Juan Dela Cruz", "Maria Santos", "Pedro Reyes", "Ana Cruz"];
+    const pieData = [98.6, 100, 97.7, 99.1];
+    const attendancePie = new Chart(pieCtx, {
+      type: 'pie',
+      data: {
+        labels: pieLabels,
+        datasets: [{
+          label: 'Attendance %',
+          data: pieData,
+          backgroundColor: pieLabels.map(() => `hsl(${Math.random()*360}, 60%, 60%)`)
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { position: 'bottom' } }
+      }
+    });
+  </script>
+
+</body>
+</html>

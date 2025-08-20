@@ -1,0 +1,97 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#45562D',
+                        'primary-hover': '#6a7f47',
+                        'card-bg': '#f4f6f3'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col">
+
+    <!-- Navigation bar -->
+    <header class="bg-primary text-white p-4 shadow flex justify-between items-center">
+        <div class="flex items-center space-x-3">
+            <img src="{% static 'image/PCNHSlogo.png' %}" alt="Logo" class="h-16 w-16 object-contain">
+            <div>
+                <h1 class="font-bold text-xl">STUDENT ATTENDANCE AND MONITORING SYSTEM</h1>
+                <h2 class="text-sm text-gray-300">WITH SMS AND RFID TECHNOLOGY</h2>
+            </div>
+        </div>
+        <a href="{% url 'home' %}" class="bg-white text-primary px-4 py-2 rounded hover:bg-gray-200">Back Home</a>
+    </header>
+
+    <!-- Main content -->
+    <main class="flex-1 p-6">
+        <h2 class="text-3xl font-bold mb-6">Dashboard</h2>
+
+        <!-- Statistics Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div class="bg-card-bg p-6 rounded-xl shadow hover:shadow-lg transition">
+                <h3 class="text-gray-500 font-semibold">Total Students</h3>
+                <p class="text-2xl font-bold text-primary mt-2">120</p>
+            </div>
+            <div class="bg-card-bg p-6 rounded-xl shadow hover:shadow-lg transition">
+                <h3 class="text-gray-500 font-semibold">Today’s Attendance</h3>
+                <p class="text-2xl font-bold text-green-600 mt-2">95</p>
+            </div>
+            <div class="bg-card-bg p-6 rounded-xl shadow hover:shadow-lg transition">
+                <h3 class="text-gray-500 font-semibold">Absent Today</h3>
+                <p class="text-2xl font-bold text-red-600 mt-2">25</p>
+            </div>
+            <div class="bg-card-bg p-6 rounded-xl shadow hover:shadow-lg transition">
+                <h3 class="text-gray-500 font-semibold">Pending Scans</h3>
+                <p class="text-2xl font-bold text-yellow-600 mt-2">5</p>
+            </div>
+        </div>
+
+        <!-- Recent Scan Logs -->
+        <section class="bg-white p-6 rounded-xl shadow">
+            <h3 class="text-2xl font-bold mb-4">Recent Scan Logs</h3>
+            <div class="overflow-auto max-h-96">
+                <table class="min-w-full bg-gray-100 border">
+                    <thead class="bg-gray-200 sticky top-0">
+                        <tr>
+                            <th class="py-2 px-4 border">Time</th>
+                            <th class="py-2 px-4 border">User</th>
+                            <th class="py-2 px-4 border">RFID Code</th>
+                            <th class="py-2 px-4 border">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for log in logs %}
+                        <tr class="{% cycle 'bg-white' 'bg-gray-50' %}">
+                            <td class="py-2 px-4 border">{{ log.timestamp|date:"H:i A" }}</td>
+                            <td class="py-2 px-4 border">
+                                {% if log.student %}{{ log.student.name }}{% else %}Unknown{% endif %}
+                            </td>
+                            <td class="py-2 px-4 border">{{ log.rfid_code }}</td>
+                            <td class="py-2 px-4 border {% if log.status == 'Success' %}text-green-600{% else %}text-red-600{% endif %}">{{ log.status }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="py-2 px-4 border text-center text-gray-500">No scans yet.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+
+</body>
+</html>
